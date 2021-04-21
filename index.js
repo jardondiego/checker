@@ -11,6 +11,8 @@ function getJwt() {
 }
 
 exports.getAvailability = async function (req, res) {
+  res.set("Access-Control-Allow-Origin", "*");
+  res.set("Access-Control-Allow-Methods", "GET, POST");
   const sheetsClient = google.sheets({ version: "v4" });
   const jwt = getJwt();
   try {
@@ -32,8 +34,8 @@ exports.getAvailability = async function (req, res) {
 
     const stations = [];
     for (const station of values) {
-      const [id, alias, free, eta] = station;
-      const formattedStation = { id, alias, free, eta };
+      const [id, alias, available, finishes_at] = station;
+      const formattedStation = { id, alias, available, finishes_at };
       stations.push(formattedStation);
     }
 
