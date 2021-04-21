@@ -34,8 +34,8 @@ exports.getAvailability = async function (req, res) {
 
     const stations = [];
     for (const station of values) {
-      const [id, alias, available, finishes_at] = station;
-      const formattedStation = { id, alias, available, finishes_at };
+      const [id, alias, finishes_at] = station;
+      const formattedStation = { id, alias, finishes_at };
       stations.push(formattedStation);
     }
 
