@@ -7,7 +7,7 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "start": "functions-framework --target=getAvailability --port=3000"
+    "start": "functions-framework --target=getAvailability --port=8000"
   },
   "dependencies": {
     "googleapis": "^71.0.0"
