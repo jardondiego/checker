@@ -11,7 +11,8 @@
   },
   "dependencies": {
     "googleapis": "^71.0.0",
-    "moment": "^2.29.1"
+    "moment": "^2.29.1",
+    "moment-timezone": "^0.5.33"
   },
   "devDependencies": {
     "@google-cloud/functions-framework": "^1.7.1"
