@@ -1,9 +1,7 @@
 const { google } = require("googleapis");
 const moment = require("moment-timezone");
 
-moment.tz.setDefault("America/Mexico_City");
-
-const isProduction = process.env.GQ_ENV === 'production';
+const isProduction = process.env.GQ_ENV === "production";
 
 function getJwt() {
   var credentials = require("./creds.json");
@@ -70,16 +68,13 @@ exports.getAvailability = async function (req, res) {
       .set({ hours: 0, minutes: 0, seconds: 0 })
       .toISOString();
 
-    const {
-      data: { items: eventsForToday },
-    } = await calendarClient.events.list(
+    const { data } = await calendarClient.events.list(
       {
         auth: jwt,
         key: apiKey,
         calendarId,
         timeMin: now,
         timeMax: tomorrowAtZero,
-        maxResults: Object.keys(stations).length,
       },
       {
         headers: {
@@ -88,6 +83,7 @@ exports.getAvailability = async function (req, res) {
       }
     );
 
+    const { items: eventsForToday } = data;
     for (const calendarEvent of eventsForToday) {
       const { summary: alias, start } = calendarEvent;
       if (alias in stations) {
