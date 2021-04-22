@@ -50,11 +50,11 @@ exports.getAvailability = async function (req, res) {
 
     const stations = {};
     for (const station of values) {
-      const [id, alias, free_at, isQueue] = station;
+      const [id, alias, free_at, is_queue] = station;
       const formattedStation = {
         id,
         free_at,
-        isQueue: isQueue === "TRUE" ? true : false,
+        is_queue: isQueue === "TRUE" ? true : false,
         busy_at: null,
       };
 
@@ -86,7 +86,7 @@ exports.getAvailability = async function (req, res) {
     const { items: eventsForToday } = data;
     for (const calendarEvent of eventsForToday) {
       const { summary: alias, start } = calendarEvent;
-      if (alias in stations) {
+      if (alias in stations && station[alias].busy_at === null) {
         stations[alias].busy_at = start.dateTime;
       }
     }
