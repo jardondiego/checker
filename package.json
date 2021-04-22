@@ -10,7 +10,8 @@
     "start": "functions-framework --target=getAvailability --port=8000"
   },
   "dependencies": {
-    "googleapis": "^71.0.0"
+    "googleapis": "^71.0.0",
+    "moment": "^2.29.1"
   },
   "devDependencies": {
     "@google-cloud/functions-framework": "^1.7.1"

@@ -1,4 +1,7 @@
 const { google } = require("googleapis");
+const moment = require("moment");
+
+const isProduction = process.env.GQ_ENV === 'production';
 
 function getJwt() {
   var credentials = require("./creds.json");
@@ -6,47 +9,97 @@ function getJwt() {
     credentials.client_email,
     null,
     credentials.private_key,
-    ["https://www.googleapis.com/auth/spreadsheets"]
+    [
+      "https://www.googleapis.com/auth/spreadsheets",
+      "https://www.googleapis.com/auth/calendar.readonly",
+    ]
   );
 }
 
 exports.getAvailability = async function (req, res) {
+  // Enable CORS requests
   res.set("Access-Control-Allow-Origin", "*");
   res.set("Access-Control-Allow-Methods", "GET, POST");
+
   const sheetsClient = google.sheets({ version: "v4" });
+  const calendarClient = google.calendar({ version: "v3" });
   const jwt = getJwt();
+  const {
+    API_KEY: apiKey,
+    SPREADSHEET_ID: spreadsheetId,
+    CALENDAR_ID: calendarId,
+  } = process.env;
+
+  // Handle spreadsheet data
   try {
     const {
       data: { values },
     } = await sheetsClient.spreadsheets.values.get(
       {
-        spreadsheetId: process.env.SPREADSHEET_ID,
+        spreadsheetId,
         range: "disponibilidad!A2:D5",
-        key: process.env.API_KEY,
+        key: apiKey,
         auth: jwt,
       },
       {
         headers: {
-          Referer: "https://gquarters.mx",
+          Referer: isProduction ? req.headers.referer : "https://gquarters.mx",
         },
       }
     );
 
-    const stations = [];
+    const stations = {};
     for (const station of values) {
-      const [id, alias, finishes_at, isQueue] = station;
+      const [id, alias, free_at, isQueue] = station;
       const formattedStation = {
         id,
-        alias,
-        finishes_at,
+        free_at,
         isQueue: isQueue === "TRUE" ? true : false,
+        busy_at: null,
       };
-      stations.push(formattedStation);
+
+      stations[alias] = formattedStation;
     }
 
-    return res.json(stations);
+    // Handle calendar free-busy info
+    const now = moment().toISOString();
+    const tomorrowAtZero = moment()
+      .add(1, "days")
+      .set({ hours: 0, minutes: 0, seconds: 0 })
+      .toISOString();
+
+    const {
+      data: { items: eventsForToday },
+    } = await calendarClient.events.list(
+      {
+        auth: jwt,
+        key: apiKey,
+        calendarId,
+        timeMin: now,
+        timeMax: tomorrowAtZero,
+        maxResults: Object.keys(stations).length,
+      },
+      {
+        headers: {
+          Referer: isProduction ? req.headers.referer : "https://gquarters.mx",
+        },
+      }
+    );
+
+    for (const calendarEvent of eventsForToday) {
+      const { summary: alias, start } = calendarEvent;
+      if (alias in stations) {
+        stations[alias].busy_at = start.dateTime;
+      }
+    }
+
+    const stationsResponse = Object.entries(stations).map(([key, value]) => ({
+      alias: key,
+      ...value,
+    }));
+    return res.json(stationsResponse);
   } catch (error) {
-    console.error("Unexpected error fetching sheets data");
+    console.error("Unexpected error");
     console.error(error);
     return res.status(500).json({ message: "Internal server error" });
   }
