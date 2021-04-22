@@ -86,7 +86,7 @@ exports.getAvailability = async function (req, res) {
     const { items: eventsForToday } = data;
     for (const calendarEvent of eventsForToday) {
       const { summary: alias, start } = calendarEvent;
-      if (alias in stations && station[alias].busy_at === null) {
+      if (alias in stations && stations[alias].busy_at === null) {
         stations[alias].busy_at = start.dateTime;
       }
     }
