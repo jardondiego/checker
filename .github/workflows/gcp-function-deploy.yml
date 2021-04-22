@@ -3,6 +3,7 @@ name: Deploy GCP Cloud Function on push
   push:
     branches:
       - master
+      - main
 
 jobs:
   deploy:
