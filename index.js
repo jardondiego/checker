@@ -54,7 +54,7 @@ exports.getAvailability = async function (req, res) {
       const formattedStation = {
         id,
         free_at,
-        is_queue: isQueue === "TRUE" ? true : false,
+        is_queue: is_queue === "TRUE" ? true : false,
         busy_at: null,
       };
 
