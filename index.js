@@ -21,7 +21,7 @@ exports.getAvailability = async function (req, res) {
     } = await sheetsClient.spreadsheets.values.get(
       {
         spreadsheetId: process.env.SPREADSHEET_ID,
-        range: "Availability!A2:D5",
+        range: "disponibilidad!A2:D5",
         key: process.env.API_KEY,
         auth: jwt,
       },
