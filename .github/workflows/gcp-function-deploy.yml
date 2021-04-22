@@ -1,0 +1,20 @@
+name: Deploy GCP Cloud Function on push
+'on':
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - id: Deploy
+      - uses: google-github-actions/deploy-cloud-functions@main
+        with:
+          name: gq-checker
+          runtime: nodejs14
+          entry_point: getAvailability
+          memory_mb: 256
+          credentials: ${{ secrets.gcp_credentials }}
+      
