@@ -1,6 +1,8 @@
 const { google } = require("googleapis");
 const moment = require("moment-timezone");
 
+moment.tz.setDefault("America/Mexico_City");
+
 const isProduction = process.env.GQ_ENV === "production";
 
 function getJwt() {
