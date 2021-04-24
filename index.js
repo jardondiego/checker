@@ -30,6 +30,8 @@ exports.getAvailability = async function (req, res) {
     API_KEY: apiKey,
     SPREADSHEET_ID: spreadsheetId,
     CALENDAR_ID: calendarId,
+    GSHEET_NAME: gSheetName,
+    GSHEET_RANGE: gSheetRange
   } = process.env;
 
   // Handle spreadsheet data
@@ -39,7 +41,7 @@ exports.getAvailability = async function (req, res) {
     } = await sheetsClient.spreadsheets.values.get(
       {
         spreadsheetId,
-        range: "disponibilidad!A2:D5",
+        range: `${gSheetName}!${gSheetRange}`,
         key: apiKey,
         auth: jwt,
       },
