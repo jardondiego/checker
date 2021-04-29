@@ -106,15 +106,8 @@ function authenticate(req, res, next) {
   next();
 }
 
-async function handleError(error, _, res) {
-  console.error("An error occurred");
-  console.error(error);
-  return res.status(500).json({ message: "Internal server error" });
-}
-
 module.exports = {
   getStations,
   getRerservations,
-  handleError,
   authenticate
 };

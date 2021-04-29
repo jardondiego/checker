@@ -21,7 +21,12 @@ async function notifyOnAvailable(req, res) {
   return res.json({ message: "ok" });
 }
 
+async function subscribeOnAvailable(req, res) {
+  return res.json({ message: "ok" });
+}
+
 module.exports = {
   getAvailability: [getRerservations, getStations, getAvailability],
   notifyOnAvailable: [authenticate, getStations, notifyOnAvailable],
+  subscribeOnAvailable,
 };
