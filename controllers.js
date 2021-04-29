@@ -26,7 +26,7 @@ async function notifyOnAvailable(req, res) {
     const { free_at } = station;
     if (!free_at) continue;
     const minsSinceFree = moment().diff(moment(free_at), "minutes");
-    if (minsSinceFree >= 0 && minsSinceFree <= 3) availableStations.push(alias);
+    if (minsSinceFree === 0) availableStations.push(alias);
   }
 
   for (const alias of availableStations) {
