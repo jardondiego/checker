@@ -16,6 +16,8 @@ app.get("/stations/notifyOnAvailable", notifyOnAvailable);
 app.get("/stations/getAvailability", getAvailability);
 app.post("/stations/subscribeOnAvailable", subscribeOnAvailable);
 
+app.disable("x-powered-by");
+
 module.exports = {
   app,
 };
