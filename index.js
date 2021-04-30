@@ -11,6 +11,7 @@ moment.tz.setDefault("America/Mexico_City");
 const app = express();
 
 app.use(cors());
+app.options("*", cors());
 
 app.get("/stations/notifyOnAvailable", notifyOnAvailable);
 app.get("/stations/getAvailability", getAvailability);
