@@ -43,6 +43,8 @@ async function notifyOnAvailable(req, res) {
 
 async function subscribeOnAvailable(req, res) {
   const { token: registrationToken } = req.body;
+  if (!registrationToken)
+    return res.status(400).json({ message: "Invalid FCM token" });
   await messaging.subscribeToTopic(registrationToken, "stations");
   return res.json({ message: "ok" });
 }
