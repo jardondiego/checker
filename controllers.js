@@ -25,8 +25,9 @@ async function notifyOnAvailable(req, res) {
   for (const [alias, station] of Object.entries(req.stations)) {
     const { free_at } = station;
     if (!free_at) continue;
-    const minsSinceFree = moment().diff(moment(free_at), "minutes");
-    if (minsSinceFree === 0) availableStations.push(alias);
+    const now = moment().set({ seconds: 0, milliseconds: 0 });
+    const minutesUntilFree = moment(free_at).diff(now, "minutes");
+    if (minutesUntilFree === 1) availableStations.push(alias);
   }
 
   for (const alias of availableStations) {
