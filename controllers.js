@@ -27,7 +27,7 @@ async function notifyOnAvailable(req, res) {
     if (!free_at) continue;
     const now = moment().set({ seconds: 0, milliseconds: 0 });
     const minutesUntilFree = moment(free_at).diff(now, "minutes");
-    if (minutesUntilFree === 1) availableStations.push(alias);
+    if (minutesUntilFree === 0) availableStations.push(alias);
   }
 
   for (const alias of availableStations) {
