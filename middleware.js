@@ -45,12 +45,13 @@ async function getStations(req, _, next) {
 
     req.stations = {};
     for (const station of values) {
-      const [id, alias, free_at, is_queue] = station;
+      const [id, alias, free_at, is_queue, model] = station;
       const formattedStation = {
         id,
         free_at,
         is_queue: is_queue === "TRUE" ? true : false,
         busy_at: null,
+        model
       };
 
       req.stations[alias] = formattedStation;
