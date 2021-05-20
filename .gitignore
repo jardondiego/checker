@@ -3,3 +3,4 @@ creds.json
 utilisers.json
 firebase-credentials.json
 firebase-credentials-staging.json
+.env
